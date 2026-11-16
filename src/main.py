@@ -8,7 +8,12 @@ import pandas as pd
 
 response = urlopen('https://api.openf1.org/v1/sessions?country_name=Belgium&session_name=Race&year=2023')
 data = json.loads(response.read().decode('utf-8'))
-print(data)
+print(data[0]['session_key'])
+
+response = urlopen(f'https://api.openf1.org/v1/session_result?session_key={data[0]["session_key"]}')
+data = json.loads(response.read().decode('utf-8'))
+df = pd.DataFrame(data)
+print(df[['position', 'driver_number', 'duration', 'gap_to_leader']])
 
 #if session_type == "Race":
 #    print(session_type)     
