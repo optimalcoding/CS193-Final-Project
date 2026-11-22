@@ -3,23 +3,24 @@ import json
 import pandas as pd
 
 country = input("Enter the country name (e.g. Netherlands, United Kingdom): ").strip().title().replace(" ", "%20")
-#session_type = input("Enter the session type (e.g., Qualifying, Sprint Qualifying): ").strip().title().replace(" ", "%20")
-year = input("Enter the year: ")
+year = input("Enter the year: ").strip()
 
 response = urlopen(f'https://api.openf1.org/v1/sessions?country_name={country}&session_name=Qualifying&year={year}')
 data = json.loads(response.read().decode('utf-8'))
-key = data[0]['session_key']
+quali_key = data[0]['session_key']
 
-response = urlopen(f'https://api.openf1.org/v1/starting_grid?session_key={key}')
+response = urlopen(f'https://api.openf1.org/v1/starting_grid?session_key={quali_key}')
 data = json.loads(response.read().decode('utf-8'))
-df = pd.DataFrame(data)
-print(df[['position', 'driver_number']])
+startgrid_df = pd.DataFrame(data)[['position', 'driver_number']]
+startgrid_df.to_csv('starting_grid.csv', index=False)
+print("Saved starting_grid.csv")
 
 response = urlopen(f'https://api.openf1.org/v1/sessions?country_name={country}&session_name=Race&year={year}')
 data = json.loads(response.read().decode('utf-8'))
-key = data[0]['session_key']
+race_key = data[0]['session_key']
 
-response = urlopen(f'https://api.openf1.org/v1/session_result?session_key={key}')
+response = urlopen(f'https://api.openf1.org/v1/session_result?session_key={race_key}')
 data = json.loads(response.read().decode('utf-8'))
-df = pd.DataFrame(data)
-print(df[['position', 'driver_number', 'gap_to_leader']])
+race_df = pd.DataFrame(data)[['position', 'driver_number', 'gap_to_leader']]
+race_df.to_csv('race_results.csv', index=False)
+print("Saved race_results.csv")
