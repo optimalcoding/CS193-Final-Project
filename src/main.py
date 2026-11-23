@@ -54,7 +54,6 @@ race_key = df[df['location'] == circuit_name]['session_key'].iloc[0]
 
 response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={race_key}')
 data = json.loads(response.read().decode('utf-8'))
-#print(data)
 data_df = pd.DataFrame(data)[['driver_number', 'first_name', 'last_name', 'name_acronym', 'team_name']]
 
 name_dict = {}
