@@ -1,13 +1,29 @@
 from urllib.request import urlopen
 import json
+from difflib import get_close_matches
 import pandas as pd
 
-country = input("Enter the country name (e.g. Netherlands, United Kingdom): ").strip().title().replace(" ", "%20")
+print("Welcome to the F1 Data Fetcher! Follow the prompts to fetch data for a specific year and country.")
+print()
 year = input("Enter the year: ").strip()
+response = urlopen(f'https://api.openf1.org/v1/sessions?session_name=Qualifying&year={year}')
+all_sessions = json.loads(response.read().decode('utf-8'))
+places_df = pd.DataFrame(all_sessions)[['country_name', 'location']]
+country_list = list(places_df['country_name'].unique())
+print(country_list)
+raw_country = input("Enter the country name (e.g. Netherlands, United Kingdom): ").strip().title()
+if raw_country not in country_list:
+    closest = get_close_matches(raw_country, country_list, n=1, cutoff=0.6)
+    if len(closest) > 0:
+        print(f"Did you mean '{closest[0]}'? Using '{closest[0]}'...")
+        raw_country = closest[0]
+    else:
+        print(f"Error: '{raw_country}' is not a valid F1 host country for {year}.")
+        exit()
+country = raw_country.replace(" ", "%20")
 
 response = urlopen(f'https://api.openf1.org/v1/sessions?country_name={country}&session_name=Qualifying&year={year}')
 data = json.loads(response.read().decode('utf-8'))
-print(len(data))
 if len(data) > 1:
     print("Multiple circuits found for the given country and year. Please select one:")
     df = pd.DataFrame(data)[['session_key', 'location']]
