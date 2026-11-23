@@ -7,7 +7,18 @@ year = input("Enter the year: ").strip()
 
 response = urlopen(f'https://api.openf1.org/v1/sessions?country_name={country}&session_name=Qualifying&year={year}')
 data = json.loads(response.read().decode('utf-8'))
-quali_key = data[0]['session_key']
+print(len(data))
+if len(data) > 1:
+    print("Multiple circuits found for the given country and year. Please select one:")
+    df = pd.DataFrame(data)[['session_key', 'location']]
+    print(df)
+    choice = int(input("Enter the row digit of the desired circuit: ").strip())
+    quali_key = data[choice]['session_key']
+    circuit_name = data[choice]['location']
+else:
+    quali_key = data[0]['session_key']
+    circuit_name = data[0]['location']
+
 
 response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={quali_key}')
 data = json.loads(response.read().decode('utf-8'))
@@ -38,7 +49,8 @@ print("Saved starting_grid.csv")
 
 response = urlopen(f'https://api.openf1.org/v1/sessions?country_name={country}&session_name=Race&year={year}')
 data = json.loads(response.read().decode('utf-8'))
-race_key = data[0]['session_key']
+df = pd.DataFrame(data)[['session_key', 'location']]
+race_key = df[df['location'] == circuit_name]['session_key'].iloc[0]
 
 response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={race_key}')
 data = json.loads(response.read().decode('utf-8'))
