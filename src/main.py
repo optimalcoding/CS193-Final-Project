@@ -104,5 +104,15 @@ race_df = pd.DataFrame(data)[['position', 'driver_number', 'gap_to_leader']]
 race_df['driver_name'] = race_df['driver_number'].map(name_dict)
 race_df['team_name'] = race_df['driver_number'].map(team_dict)
 race_df['name_acronym'] = race_df['driver_number'].map(acronym_dict)
+response = urlopen(f'https://api.openf1.org/v1/stints?session_key={race_key}')
+data = json.loads(response.read().decode('utf-8'))
+tires_df = pd.DataFrame(data)[['driver_number', 'stint_number']]
+stint_df = {}
+for i in range(len(tires_df)):
+    driver_number = tires_df['driver_number'][i]
+    stint_number = tires_df['stint_number'][i]
+    stint_df[driver_number] = stint_number
+race_df['total_stints'] = race_df['driver_number'].map(stint_df)
 race_df.to_csv('race_results.csv', index=False)
 print("Saved race_results.csv")
+
