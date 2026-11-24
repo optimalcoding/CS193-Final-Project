@@ -20,5 +20,20 @@ Tech Stack
 
 Instructions:
 
-Clone the repo by using git clone 
+Clone the repo by using git clone https://github.com/optimalcoding/F1-Data-Scraper.git
+And then go into the directory with: cd F1-Data-Scraper
+
+For Windows Powershell do:
+python3 -m venv .venv
+.venv\Scripts\Activate.ps1
+
+MacOS and Linux can do:
+python3 -m venv .venv
+source .venv/bin/activate
+
+Install Dependencies:
+pip install -r requirements.txt
+
+Run the script:
+python src/main.py
 
