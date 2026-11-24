@@ -109,6 +109,9 @@ data = json.loads(response.read().decode('utf-8'))
 tires_df = pd.DataFrame(data)[['driver_number', 'stint_number']]
 stint_df = {}
 for i in range(len(tires_df)):
+    # OpenF1 API does not natively do the total stints as they record each stint as a separate row
+    # so I have a for loop to iterate through the rows and create a dictionary where the key is the driver number and value is 
+    # the total stints and I use .map to map the driver number in race result dataframe to the total stints one
     driver_number = tires_df['driver_number'][i]
     stint_number = tires_df['stint_number'][i]
     stint_df[driver_number] = stint_number
