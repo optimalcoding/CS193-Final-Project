@@ -3,6 +3,28 @@ import json
 from difflib import get_close_matches
 import pandas as pd
 
+
+def get_driver_dict(session_key):
+    response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={session_key}')
+    data = json.loads(response.read().decode('utf-8'))
+    data_df = pd.DataFrame(data)[['driver_number', 'first_name', 'last_name', 'name_acronym', 'team_name']]
+
+    name_dict = {}
+    team_dict = {}
+    acronym_dict = {}
+    for i in range(len(data_df)):
+        driver_number = data_df['driver_number'][i]
+        first_name = data_df['first_name'][i]
+        last_name = data_df['last_name'][i]
+        name_acronym = data_df['name_acronym'][i]
+        team_name = data_df['team_name'][i]
+
+        name_dict[driver_number] = f"{first_name} {last_name}"
+        team_dict[driver_number] = team_name
+        acronym_dict[driver_number] = name_acronym
+
+    return name_dict, team_dict, acronym_dict
+
 print("Welcome to the F1 Data Fetcher! Follow the prompts to fetch data for a specific year and country.")
 print()
 year = input("Enter the year: ").strip()
@@ -35,24 +57,7 @@ else:
     quali_key = data[0]['session_key']
     circuit_name = data[0]['location']
 
-
-response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={quali_key}')
-data = json.loads(response.read().decode('utf-8'))
-data_df = pd.DataFrame(data)[['driver_number', 'first_name', 'last_name', 'name_acronym', 'team_name']]
-
-name_dict = {}
-team_dict = {}
-acronym_dict = {}
-for i in range(len(data_df)):
-    driver_number = data_df['driver_number'][i]
-    first_name = data_df['first_name'][i]
-    last_name = data_df['last_name'][i]
-    name_acronym = data_df['name_acronym'][i]
-    team_name = data_df['team_name'][i]
-
-    name_dict[driver_number] = f"{first_name} {last_name}"
-    team_dict[driver_number] = team_name
-    acronym_dict[driver_number] = name_acronym
+name_dict, team_dict, acronym_dict = get_driver_dict(quali_key)
 
 response = urlopen(f'https://api.openf1.org/v1/starting_grid?session_key={quali_key}')
 data = json.loads(response.read().decode('utf-8'))
@@ -68,23 +73,7 @@ data = json.loads(response.read().decode('utf-8'))
 df = pd.DataFrame(data)[['session_key', 'location']]
 race_key = df[df['location'] == circuit_name]['session_key'].iloc[0]
 
-response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={race_key}')
-data = json.loads(response.read().decode('utf-8'))
-data_df = pd.DataFrame(data)[['driver_number', 'first_name', 'last_name', 'name_acronym', 'team_name']]
-
-name_dict = {}
-team_dict = {}
-acronym_dict = {}
-for i in range(len(data_df)):
-    driver_number = data_df['driver_number'][i]
-    first_name = data_df['first_name'][i]
-    last_name = data_df['last_name'][i]
-    name_acronym = data_df['name_acronym'][i]
-    team_name = data_df['team_name'][i]
-
-    name_dict[driver_number] = f"{first_name} {last_name}"
-    team_dict[driver_number] = team_name
-    acronym_dict[driver_number] = name_acronym
+name_dict, team_dict, acronym_dict = get_driver_dict(race_key)
 
 response = urlopen(f'https://api.openf1.org/v1/session_result?session_key={race_key}')
 data = json.loads(response.read().decode('utf-8'))
