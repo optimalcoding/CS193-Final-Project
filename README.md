@@ -17,16 +17,16 @@ System Diagram:
 
 Tech Stack
 - Languages: Python 3
-- API: fastf1
-- Data Manipulation: Pandas
+- API: OpenF1
+- Data Manipulation: Pandas, Difflib, Urllib.request, JSON
 - Storage: .CSV Files on client local machine
 
 Instructions:
 
 1) Clone the repository and navigate into project folder:
 
-        git clone https://github.com/optimalcoding/CS193-Final-Project.git
-        cd CS193-Final-Project
+        git clone https://github.com/optimalcoding/F1-Data-Scraper.git 
+        cd F1-Data-Scraper
 
 2) Create and activate a virtual environment:
 
