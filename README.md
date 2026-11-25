@@ -12,6 +12,9 @@ How it works:
 3) If a country has multiple circuits (USA or Italy for example), the user will then be prompted to choose which circuit they would like to view
 4) The program accesses OpenF1 API and packages the starting grid and race results into two CSV files stored on the user's local machine
 
+System Diagram:
+![System Diagram](docs/f1.drawio.png)
+
 Tech Stack
 - Languages: Python 3
 - API: fastf1
