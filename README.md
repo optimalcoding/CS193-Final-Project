@@ -25,25 +25,25 @@ Instructions:
 
 1) Clone the repository and navigate into project folder 
     ```bash
-        git clone https://github.com/optimalcoding/CS193-Final-Project.git
+        git clone https://github.com/optimalcoding/F1-Data-Scraper.git 
         cd CS193-Final-Project
-
-2) Create and activate a virtual environment
-For Windows Powershell do:
+    '''
+2) Create and activate a virtual environmentL
 '''bash
+For Windows Powershell do:
     python3 -m venv .venv
     .venv\Scripts\Activate.ps1
 
 MacOS and Linux can do:
-'''bash
+
     python3 -m venv .venv
     source .venv/bin/activate
 
 3) Install Dependencies:
-'''bash
+
     pip install -r requirements.txt
 
 4) Run the script:
-'''bash
-    python src/main.py
 
+    python src/main.py
+'''
