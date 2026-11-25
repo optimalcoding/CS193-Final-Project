@@ -30,12 +30,12 @@ Instructions:
 
 2) Create and activate a virtual environment:
 
-For Windows Powershell do:
+        For Windows Powershell do:
 
         python3 -m venv .venv
         .venv\Scripts\Activate.ps1
 
-MacOS and Linux can do:
+        MacOS and Linux can do:
 
         python3 -m venv .venv
         source .venv/bin/activate
